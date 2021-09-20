@@ -99,7 +99,7 @@ hello(&args, sizeof(args));
 R package ``NAMESPACE`` file
 
 ```R
-useDynLib(testpack)
+useDynLib(IronR)
 exportPattern("^[[:alpha:]]+")
 importFrom(Rcpp, evalCpp)
 ```

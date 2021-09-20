@@ -10,8 +10,18 @@ Rcpp::Rostream<true>&  Rcpp::Rcout = Rcpp::Rcpp_cout_get();
 Rcpp::Rostream<false>& Rcpp::Rcerr = Rcpp::Rcpp_cerr_get();
 #endif
 
+// load_hostfxr
+bool load_hostfxr();
+RcppExport SEXP _IronR_load_hostfxr() {
+BEGIN_RCPP
+    Rcpp::RObject rcpp_result_gen;
+    Rcpp::RNGScope rcpp_rngScope_gen;
+    rcpp_result_gen = Rcpp::wrap(load_hostfxr());
+    return rcpp_result_gen;
+END_RCPP
+}
 // netcore5_init0
-int netcore5_init0();
+bool netcore5_init0();
 RcppExport SEXP _IronR_netcore5_init0() {
 BEGIN_RCPP
     Rcpp::RObject rcpp_result_gen;
@@ -32,6 +42,7 @@ END_RCPP
 }
 
 static const R_CallMethodDef CallEntries[] = {
+    {"_IronR_load_hostfxr", (DL_FUNC) &_IronR_load_hostfxr, 0},
     {"_IronR_netcore5_init0", (DL_FUNC) &_IronR_netcore5_init0, 0},
     {"_IronR_rcpp_hello_world", (DL_FUNC) &_IronR_rcpp_hello_world, 0},
     {NULL, NULL, 0}

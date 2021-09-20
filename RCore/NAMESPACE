@@ -1,3 +1,3 @@
-useDynLib(testpack, .registration=TRUE)
+useDynLib(IronR, .registration=TRUE)
 importFrom(Rcpp, evalCpp)
 exportPattern("^[[:alpha:]]+")
