@@ -351,3 +351,5 @@ MigrationBackup/
 
 IronR/Lib
 .Rproj.user
+*.o
+*.dll
