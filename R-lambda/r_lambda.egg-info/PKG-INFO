@@ -70,7 +70,7 @@ argv = {"str": "world"},
     options = None,
     workdir = "./",
     docker = docker.docker_image(id = "example_image", 
-        volumn = ["/home"], name = "test"):, 
+        volumn = ["/home"], name = "test"), 
     run_debug = False
 )
 ```

@@ -1,14 +1,7 @@
-
 #!/usr/bin/python3
 
-import json 
-import os
-import sys
-import docker
 import shell
 import r_env
-
-from pathlib import Path
 
 def call_lambda(func, 
                 argv = None, 
@@ -18,19 +11,20 @@ def call_lambda(func,
                 run_debug = False):
     """A helper function for run a R# function from the commandline
     
-    Keyword arguments:
-    func -- required, the target R# function name to run, should be in format 
+    #### Keyword arguments:
+    
+    + func -- required, the target R# function name to run, should be in format 
         like: pkg_name::function_name
-    argv -- optional, the function parameters of the target R# function, default none 
+    + argv -- optional, the function parameters of the target R# function, default none 
         means target function not required of parameters.
-    options -- optional, the R# runtime environment options, this parameter value will
+    + options -- optional, the R# runtime environment options, this parameter value will
         take effects of the ``getOption`` function in the R# environment.
-    workdir -- optional, the workdir for invoke the target R# function, default work dir
+    + workdir -- optional, the workdir for invoke the target R# function, default work dir
         for the function invocation is at current directory
-    docker -- optional, the docker image argument for this function invoke, default 
+    + docker -- optional, the docker image argument for this function invoke, default 
         value none means run on locally, not running in a docker container. The value 
         of this parameter should be generated via the ``docker_image`` helper function. 
-    run_debug -- optional, a boolean value for flag the function call running in 
+    + run_debug -- optional, a boolean value for flag the function call running in 
         debug mode or not? set this parameter value to ``True`` means echo more verbose
         information about the function call and skip of the commandline invoke.
     """
