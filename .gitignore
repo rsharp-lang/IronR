@@ -353,3 +353,5 @@ IronR/Lib
 .Rproj.user
 *.o
 *.dll
+*.whl
+*.gz
