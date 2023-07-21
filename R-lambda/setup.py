@@ -17,11 +17,11 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="r_lambda",
-    version="0.0.1",
+    version="1.0.1",
     author="xieguigang",
     author_email="xie.guigang@gcmodeller.org",
     packages=["r_lambda"],
-    description="A simple package for call a target R# function from commandline",
+    description="A simple commandline wrapper package for call a target R# function from commandline",
     long_description=description,
     long_description_content_type="text/markdown",
     url="https://github.com/rsharp-lang/IronR",

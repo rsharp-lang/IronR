@@ -1,7 +1,7 @@
 Metadata-Version: 2.1
 Name: r-lambda
-Version: 0.0.1
-Summary: A simple package for call a target R# function from commandline
+Version: 1.0.1
+Summary: A simple commandline wrapper package for call a target R# function from commandline
 Home-page: https://github.com/rsharp-lang/IronR
 Author: xieguigang
 Author-email: xie.guigang@gcmodeller.org
