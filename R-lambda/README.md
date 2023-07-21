@@ -50,8 +50,7 @@ For call a R# lambda function from your python workflow, then you could use this
 
 ```py
 import r_lambda
-
-from r_lambda import docker
+from r_lambda.docker import docker_image
 
 r_lambda.call_lambda("demo::hello_world", 
 argv = {"str": "world"}, 
