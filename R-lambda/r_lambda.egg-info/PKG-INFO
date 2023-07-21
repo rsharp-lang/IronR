@@ -1,3 +1,15 @@
+Metadata-Version: 2.1
+Name: r-lambda
+Version: 1.0.1
+Summary: A simple commandline wrapper package for call a target R# function from commandline
+Home-page: https://github.com/rsharp-lang/IronR
+Author: xieguigang
+Author-email: xie.guigang@gcmodeller.org
+License: MIT
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+License-File: LICENSE
+
 # Run ``R#`` lambda function in python workflow
 
 ## Introduce the ``R#`` lambda
@@ -50,7 +62,8 @@ For call a R# lambda function from your python workflow, then you could use this
 
 ```py
 import r_lambda
-from r_lambda.docker import docker_image
+
+from r_lambda import docker
 
 r_lambda.call_lambda("demo::hello_world", 
 argv = {"str": "world"}, 
