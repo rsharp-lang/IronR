@@ -56,7 +56,7 @@ r_lambda.call_lambda("demo::hello_world",
 argv = {"str": "world"}, 
     options = None,
     workdir = "./",
-    docker = docker.docker_image(id = "example_image", 
+    docker = docker_image(id = "example_image", 
         volumn = ["/home"], name = "test"), 
     run_debug = False
 )
