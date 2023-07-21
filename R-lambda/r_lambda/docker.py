@@ -1,5 +1,5 @@
 import os
-
+import platform
 
 def docker_image(id, volumn=[], name=None):
     """A helper function for create the docker argument
@@ -18,18 +18,25 @@ def docker_image(id, volumn=[], name=None):
 def mount_volumn(docker_run, argv, workdir, docker_config):
     """Create the docker volumn mount argument
 
-    argv -- the target R# function parameters
-    docker -- the docker argument object for create docker run, this argument
+    + argv -- the target R# function parameters
+    + docker -- the docker argument object for create docker run, this argument
         value should be generated via the ``docker_image`` helper function.
-    docker_run -- the commandline argument collection list for run the docker
+    + docker_run -- the commandline argument collection list for run the docker
         command
     """
-    docker = os.popen("which docker").read().strip()
+
+    docker = "docker"
+
+    # config for run commandline test on windows
+    if platform.system() != "Windows":
+        docker = os.popen("which docker").read().strip()
+
     workspace = os.path.abspath(workdir)
 
-    docker_run.append("-v /var/run/docker.sock:/run/docker.sock")
-    docker_run.append('-v "{0}:/bin/docker"'.format(docker))
-    docker_run.append('-v "/tmp:/tmp"')
+    if platform.system() != "Windows":
+        docker_run.append("-v /var/run/docker.sock:/run/docker.sock")
+        docker_run.append('-v "{0}:/bin/docker"'.format(docker))
+        docker_run.append('-v "/tmp:/tmp"')
 
     if not docker_config["volumn"] is None:
         for arg in docker_config["volumn"]:
