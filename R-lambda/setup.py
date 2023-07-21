@@ -2,7 +2,7 @@ import setuptools
   
 with open("README.md", "r") as fh:
     description = fh.read()
-  
+
 setuptools.setup(
     name="r-lambda",
     version="0.0.1",
