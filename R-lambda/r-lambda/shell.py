@@ -1,4 +1,5 @@
 import docker
+import os
 
 class shell:
 
@@ -49,6 +50,14 @@ class local_shell(shell):
         shell.append(RSCRIPT_LAMBDA)
 
         return " ".join(shell)
+
+    def call_lambda(self, func, run_debug = False):
+        pwd = os.getcwd()
+        os.chdir(self.workdir)
+        exitcode = super().call_lambda(func, run_debug = run_debug)
+        os.chdir(pwd)
+
+        return exitcode
 
 class docker_run(shell):
 

@@ -40,12 +40,11 @@ def call_lambda(func,
     if options is None: options = {}
 
     r_env.save_configs(argv, options, workdir)
-
-    shell = None 
+    r_lambda = None 
 
     if docker is None:
-        shell = shell.local_shell(argv, options, workdir)
+        r_lambda = shell.local_shell(argv, options, workdir)
     else:
-        shell = shell.docker_run(argv, options, docker, workdir)
+        r_lambda = shell.docker_run(argv, options, docker, workdir)
 
-    return shell.call_lambda(func, run_debug = run_debug)
+    return r_lambda.call_lambda(func, run_debug = run_debug)
