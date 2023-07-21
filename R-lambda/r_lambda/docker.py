@@ -15,13 +15,13 @@ def docker_image(id, volumn=[], name=None):
     return {"image": id, "volumn": volumn, "name": name}
 
 
-def mount_volumn(docker_run, argv, workdir, docker):
+def mount_volumn(docker_run, argv, workdir, docker_config):
     """Create the docker volumn mount argument
 
     argv -- the target R# function parameters
     docker -- the docker argument object for create docker run, this argument
         value should be generated via the ``docker_image`` helper function.
-    docker_run -- the commandline argument collection for run the docker
+    docker_run -- the commandline argument collection list for run the docker
         command
     """
     docker = os.popen("which docker").read().strip()
@@ -31,9 +31,9 @@ def mount_volumn(docker_run, argv, workdir, docker):
     docker_run.append('-v "{0}:/bin/docker"'.format(docker))
     docker_run.append('-v "/tmp:/tmp"')
 
-    if not docker.volumn is None:
-        for arg in docker.volumn:
-            if argv.has_key(arg):
+    if not docker_config["volumn"] is None:
+        for arg in docker_config["volumn"]:
+            if arg in argv:
                 # mount volumn from the function argument
                 vol = os.path.abspath(argv[arg])
             else:

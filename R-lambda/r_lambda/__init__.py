@@ -1,7 +1,7 @@
 #!/usr/bin/python3
 
-import shell
-import r_env
+from r_lambda import shell
+from r_lambda import r_env
 
 def call_lambda(func, 
                 argv = None, 

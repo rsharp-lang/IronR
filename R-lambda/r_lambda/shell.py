@@ -1,7 +1,8 @@
-import docker
 import os
 
+from r_lambda import docker
 from abc import ABC, abstractmethod
+
 
 class shell(ABC):
     def __init__(self, argv, options, workdir):
@@ -16,7 +17,7 @@ class shell(ABC):
 
     def call_lambda(self, func, run_debug=False):
         shell = 0
-        shell_command = self.commandline(func, run_debug)
+        shell_command = self.commandline(func)
 
         print("")
         print("Run shell commandline:")
@@ -68,19 +69,19 @@ class docker_run(shell):
         super().__init__(argv, options, workdir)
 
     def commandline(self, func):
-        image_id = self.docker.image
+        image_id = self.docker["image"]
 
         run_pipeline = []
         run_pipeline.append("docker run -it --rm -e WINEDEBUG=-all")
 
-        if not self.docker.name is None:
-            run_pipeline.append('--name "{}"'.format(self.docker.name))
+        if not self.docker["name"] is None:
+            run_pipeline.append('--name "{}"'.format(self.docker["name"]))
 
         run_pipeline = docker.mount_volumn(
             docker_run=run_pipeline,
             argv=self.argv,
             workdir=self.workdir,
-            docker=self.docker,
+            docker_config=self.docker,
         )
         run_pipeline.append(image_id)
         run_pipeline.append(self.local.commandline(func))
