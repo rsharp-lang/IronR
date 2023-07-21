@@ -1,3 +1,5 @@
+import docker
+
 class shell:
 
     def __init__(self, argv, options, workdir):
@@ -52,6 +54,22 @@ class docker_run(shell):
 
     def __init__(self, argv, options, docker, workdir):
         self.docker = docker
+        self.local = local_shell(argv, options, workdir)
+
         super().__init__(argv, options, workdir)
 
     def commandline(self, func):
+        image_id = self.docker.image
+
+        run_pipeline = []
+        run_pipeline.append("docker run -it --rm -e WINEDEBUG=-all")
+        run_pipeline = docker.mount_volumn(
+            docker_run = run_pipeline, 
+            argv = self.argv, 
+            workdir = self.workdir, 
+            docker = self.docker
+        )
+        run_pipeline.append(image_id)
+        run_pipeline.append(self.local.commandline(func))
+
+        return " ".join(run_pipeline)
