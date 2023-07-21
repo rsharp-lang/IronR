@@ -6,6 +6,7 @@ import os
 import sys
 import docker
 import shell
+import r_env
 
 from pathlib import Path
 
@@ -13,7 +14,7 @@ def call_lambda(func,
                 argv = None, 
                 options = None,
                 workdir = "./",
-                image = None, 
+                docker = None, 
                 run_debug = False):
     """A helper function for run a R# function from the commandline
     
@@ -26,7 +27,7 @@ def call_lambda(func,
         take effects of the ``getOption`` function in the R# environment.
     workdir -- optional, the workdir for invoke the target R# function, default work dir
         for the function invocation is at current directory
-    image -- optional, the docker image argument for this function invoke, default 
+    docker -- optional, the docker image argument for this function invoke, default 
         value none means run on locally, not running in a docker container. The value 
         of this parameter should be generated via the ``docker_image`` helper function. 
     run_debug -- optional, a boolean value for flag the function call running in 
@@ -38,44 +39,13 @@ def call_lambda(func,
     if argv is None: argv = {}
     if options is None: options = {}
 
-    
+    r_env.save_configs(argv, options, workdir)
 
-    save_configs(argv, options, workdir)
+    shell = None 
 
+    if docker is None:
+        shell = shell.local_shell(argv, options, workdir)
+    else:
+        shell = shell.docker_run(argv, options, docker, workdir)
 
-
-
-def save_configs(argv, options, workdir):
-    """Save the R# runtime configuration to the workdir
-
-    Keyword arguments:
-    workdir -- required, the working directory of the R# function invocation
-    argv -- required, the parameter list of the target R# function for invoke
-    options -- required, the R# runtime environment configs
-    """
-
-    print("*************** setup the R-dotnet runtime environment variables *****************")
-    print("")
-    print("view of your input parameters:")
-    print(argv)
-
-    # Serializing json and setup Rscript envrionment variables 
-    # at current workspace
-    argv_str = json.dumps(argv, indent = 2)
-    pwd = os.path.abspath(workdir)
-    r_env = os.path.join(pwd, ".r_env")
-
-    if not os.path.exists(r_env): 
-        os.makedirs(r_env)
-
-    jsonfile = open("{}/.r_env/run.json".format(pwd), 'w')
-    jsonfile.write(argv_str)
-    jsonfile.close()
-
-    argv_str = json.dumps(options, indent = 2)
-    
-    jsonfile = open("{}/.r_env/options.json".format(pwd), 'w')
-    jsonfile.write(argv_str)
-    jsonfile.close()
-
-    return argv
+    return shell.call_lambda(func, run_debug = run_debug)
