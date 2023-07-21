@@ -4,25 +4,9 @@
 import json 
 import os
 import sys
+import docker
 
 from pathlib import Path
-
-def docker_image(id, volumn = [], name = None):
-    """A helper function for create the docker argument
-
-    Keyword arguments:
-    id -- required, the docker image id to run the application 
-    volumn -- optional, the volumn names to mapping from the physical file system to 
-        the docker internal file system
-    name -- optional, the name that specific to the running container, 
-        default value none means no name was specific.
-    """
-
-    return {
-        "image": id,
-        "volumn": volumn,
-        "name": name
-    }
 
 def call_lambda(func, 
                 argv = None, 
@@ -59,7 +43,7 @@ def call_lambda(func,
 
     save_configs(argv, options, workdir)
 
-    
+
 
 
 def save_configs(argv, options, workdir):
