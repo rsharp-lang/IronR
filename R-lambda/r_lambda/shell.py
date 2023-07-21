@@ -1,7 +1,9 @@
 import docker
 import os
 
-class shell:
+from abc import ABC, abstractmethod
+
+class shell(ABC):
     def __init__(self, argv, options, workdir):
         self.argv = argv
         self.options = options
