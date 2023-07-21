@@ -72,6 +72,10 @@ class docker_run(shell):
 
         run_pipeline = []
         run_pipeline.append("docker run -it --rm -e WINEDEBUG=-all")
+
+        if not self.docker.name is None:
+            run_pipeline.append("--name \"{}\"".format(self.docker.name))
+
         run_pipeline = docker.mount_volumn(
             docker_run = run_pipeline, 
             argv = self.argv, 
