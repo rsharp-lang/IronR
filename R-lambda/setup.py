@@ -1,5 +1,17 @@
 import setuptools
-  
+
+# pip3 install setuptools wheel
+# python3 setup.py sdist bdist_wheel
+
+# upload package to repository
+# pip3 install twine
+# twine upload --repository pypi dist/*
+
+# pip install test-package
+# 
+# import r_lambda
+# from r_lambda.docker import docker_image
+
 with open("README.md", "r") as fh:
     description = fh.read()
 
