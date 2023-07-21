@@ -38,9 +38,7 @@ def call_lambda(func,
     if argv is None: argv = {}
     if options is None: options = {}
 
-    # run rscript command
-    RSCRIPT_HOST   = "/usr/local/bin/Rscript.dll"    
-    RSCRIPT_LAMBDA = "--lambda {} --SetDllDirectory /usr/local/bin/".format(func)
+    
 
     save_configs(argv, options, workdir)
 
