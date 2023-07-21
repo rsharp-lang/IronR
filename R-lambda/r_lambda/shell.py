@@ -2,7 +2,6 @@ import docker
 import os
 
 class shell:
-
     def __init__(self, argv, options, workdir):
         self.argv = argv
         self.options = options
@@ -10,14 +9,13 @@ class shell:
 
     @abstractmethod
     def commandline(self, func):
-        """Generates the commandline for run the target R# lambda function
-        """
+        """Generates the commandline for run the target ``R#`` lambda function"""
         pass
 
-    def call_lambda(self, func, run_debug = False):
+    def call_lambda(self, func, run_debug=False):
         shell = 0
         shell_command = self.commandline(func, run_debug)
-        
+
         print("")
         print("Run shell commandline:")
         print(shell_command)
@@ -34,14 +32,14 @@ class shell:
 
         return shell
 
-class local_shell(shell):
 
+class local_shell(shell):
     def __init__(self, argv, options, workdir):
         super().__init__(argv, options, workdir)
 
     def commandline(self, func):
         # run rscript command
-        RSCRIPT_HOST   = "/usr/local/bin/Rscript.dll"    
+        RSCRIPT_HOST = "/usr/local/bin/Rscript.dll"
         RSCRIPT_LAMBDA = "--lambda {} --SetDllDirectory /usr/local/bin/".format(func)
 
         shell = []
@@ -51,16 +49,16 @@ class local_shell(shell):
 
         return " ".join(shell)
 
-    def call_lambda(self, func, run_debug = False):
+    def call_lambda(self, func, run_debug=False):
         pwd = os.getcwd()
         os.chdir(self.workdir)
-        exitcode = super().call_lambda(func, run_debug = run_debug)
+        exitcode = super().call_lambda(func, run_debug=run_debug)
         os.chdir(pwd)
 
         return exitcode
 
-class docker_run(shell):
 
+class docker_run(shell):
     def __init__(self, argv, options, docker, workdir):
         self.docker = docker
         self.local = local_shell(argv, options, workdir)
@@ -74,13 +72,13 @@ class docker_run(shell):
         run_pipeline.append("docker run -it --rm -e WINEDEBUG=-all")
 
         if not self.docker.name is None:
-            run_pipeline.append("--name \"{}\"".format(self.docker.name))
+            run_pipeline.append('--name "{}"'.format(self.docker.name))
 
         run_pipeline = docker.mount_volumn(
-            docker_run = run_pipeline, 
-            argv = self.argv, 
-            workdir = self.workdir, 
-            docker = self.docker
+            docker_run=run_pipeline,
+            argv=self.argv,
+            workdir=self.workdir,
+            docker=self.docker,
         )
         run_pipeline.append(image_id)
         run_pipeline.append(self.local.commandline(func))

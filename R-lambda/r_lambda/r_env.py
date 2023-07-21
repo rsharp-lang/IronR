@@ -1,10 +1,11 @@
-import json 
+import json
 import os
 import sys
 import docker
 import shell
 
 from pathlib import Path
+
 
 def save_configs(argv, options, workdir):
     """Save the R# runtime configuration to the workdir
@@ -15,27 +16,29 @@ def save_configs(argv, options, workdir):
     options -- required, the R# runtime environment configs
     """
 
-    print("*************** setup the R-dotnet runtime environment variables *****************")
+    print(
+        "*************** setup the R-dotnet runtime environment variables *****************"
+    )
     print("")
     print("view of your input parameters:")
     print(argv)
 
-    # Serializing json and setup Rscript envrionment variables 
+    # Serializing json and setup Rscript envrionment variables
     # at current workspace
-    argv_str = json.dumps(argv, indent = 2)
+    argv_str = json.dumps(argv, indent=2)
     pwd = os.path.abspath(workdir)
     r_env = os.path.join(pwd, ".r_env")
 
-    if not os.path.exists(r_env): 
+    if not os.path.exists(r_env):
         os.makedirs(r_env)
 
-    jsonfile = open("{}/.r_env/run.json".format(pwd), 'w')
+    jsonfile = open("{}/.r_env/run.json".format(pwd), "w")
     jsonfile.write(argv_str)
     jsonfile.close()
 
-    argv_str = json.dumps(options, indent = 2)
-    
-    jsonfile = open("{}/.r_env/options.json".format(pwd), 'w')
+    argv_str = json.dumps(options, indent=2)
+
+    jsonfile = open("{}/.r_env/options.json".format(pwd), "w")
     jsonfile.write(argv_str)
     jsonfile.close()
 
