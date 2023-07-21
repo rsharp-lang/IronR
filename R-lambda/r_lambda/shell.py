@@ -16,20 +16,24 @@ class shell(ABC):
         pass
 
     def call_lambda(self, func, run_debug=False):
+        print(" -> r_lambda: {}".format(func))
+        print("")
+
         shell = 0
         shell_command = self.commandline(func)
 
         print("")
         print("Run shell commandline:")
         print(shell_command)
+        print(" ------- start -------")
         print("")
 
         if not run_debug:
             shell = os.system(shell_command)
         else:
-            print("skip of run shell command!")
+            print("[debug] skip of run shell command for debug test!")
 
-        print("run R# lambda pipeline job done!")
+        print("[pipeline_done] run R# lambda job done!")
         print("exit={0}".format(shell))
         print("")
 
@@ -83,6 +87,7 @@ class docker_run(shell):
             workdir=self.workdir,
             docker_config=self.docker,
         )
+        run_pipeline.append("--privileged=true")
         run_pipeline.append(image_id)
         run_pipeline.append(self.local.commandline(func))
 

@@ -33,19 +33,20 @@ def mount_volumn(docker_run, argv, workdir, docker_config):
 
     workspace = os.path.abspath(workdir)
 
-    if platform.system() != "Windows":
-        docker_run.append("-v /var/run/docker.sock:/run/docker.sock")
-        docker_run.append('-v "{0}:/bin/docker"'.format(docker))
-        docker_run.append('-v "/tmp:/tmp"')
+    docker_run.append("-v /var/run/docker.sock:/run/docker.sock")
+    docker_run.append('-v "{0}:/bin/docker"'.format(docker))
+    docker_run.append('-v "/tmp:/tmp"')
 
     if not docker_config["volumn"] is None:
         for arg in docker_config["volumn"]:
             if arg in argv:
                 # mount volumn from the function argument
                 vol = os.path.abspath(argv[arg])
+                print("[mount] argv.{} -> {}".format(arg, vol))
             else:
                 # mount volumn from the docker volumn property
                 vol = os.path.abspath(arg)
+                print("[mount] {} -> {}".format(arg, vol))
 
             docker_run.append('-v "{0}:{0}"'.format(vol))
 
