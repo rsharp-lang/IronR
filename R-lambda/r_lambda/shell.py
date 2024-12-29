@@ -66,6 +66,10 @@ class local_shell(shell):
 
 
 class docker_run(shell):
+    """
+    commandline generator wrapper for the ``docker run`` command.
+    """
+
     def __init__(self, argv, options, docker, workdir):
         self.docker = docker
         self.local = local_shell(argv, options, workdir)
@@ -77,6 +81,9 @@ class docker_run(shell):
 
         run_pipeline = []
         run_pipeline.append("docker run -it --rm -e WINEDEBUG=-all")
+
+        if not self.docker["shm_size"] is None:
+            run_pipeline.append('--shm-size={}'.format(self.docker["shm_size"]))
 
         if not self.docker["name"] is None:
             run_pipeline.append('--name "{}"'.format(self.docker["name"]))
