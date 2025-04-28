@@ -162,7 +162,7 @@ class docker_run(shell):
         image_id = self.docker["image"]
 
         run_pipeline = []
-        run_pipeline.append("docker run -it --rm -e WINEDEBUG=-all")
+        run_pipeline.append("docker run --rm -e WINEDEBUG=-all")
 
         if not self.docker["shm_size"] is None:
             run_pipeline.append('--shm-size={}'.format(self.docker["shm_size"]))
