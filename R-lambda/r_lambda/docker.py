@@ -3,7 +3,7 @@ import platform
 
 # --shm-size=512m
 
-def docker_image(id, volumn=[], name=None, shm_size=None):
+def docker_image(id, volumn=[], name=None, tty = False, shm_size=None):
     """
     A helper function for create the docker argument
 
@@ -21,6 +21,7 @@ def docker_image(id, volumn=[], name=None, shm_size=None):
     """
 
     return {"image": id, "volumn": volumn, "name": name,
+            "tty": tty,
             "shm_size": shm_size}
 
 

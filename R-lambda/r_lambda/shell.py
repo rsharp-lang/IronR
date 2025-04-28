@@ -88,6 +88,10 @@ class docker_run(shell):
         if not self.docker["name"] is None:
             run_pipeline.append('--name "{}"'.format(self.docker["name"]))
 
+        if not self.docker["tty"] is None:
+            if self.docker["tty"]:
+                run_pipeline.append('-it')
+
         run_pipeline = docker.mount_volumn(
             docker_run=run_pipeline,
             argv=self.argv,
