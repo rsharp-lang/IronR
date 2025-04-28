@@ -17,7 +17,7 @@ with open("README.md", "r") as fh:
 
 setuptools.setup(
     name="r_lambda",
-    version="1.1.2025.0501",
+    version="1.1.2025.0502",
     author="xieguigang",
     author_email="xie.guigang@gcmodeller.org",
     packages=["r_lambda"],
