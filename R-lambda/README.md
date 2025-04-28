@@ -7,14 +7,17 @@ This package enables seamless execution of R# lambda functions within Python wor
 ## Key Features
 ​
 + Multi-Environment Execution​
+
   - Local Execution: Direct execution via .NET R# runtime
 ​  - Docker Execution: Containerized runs with automatic volume management
 
 + ​Automatic Configuration​
+
   - Parameter serialization to ``.r_env/run.json``
   - Runtime options serialization to ``.r_env/options.json``
 
 + Unified Interface​
+
   - Consistent API for local and containerized execution
   - Support for both dictionary and CLI-style arguments
 
@@ -94,7 +97,7 @@ call_lambda(func, ​**kwargs)
 
 | Parameter | Type      | Description                                    | Default   |
 |-----------|-----------|------------------------------------------------|-----------|
-| func      | str       | R# function in ``package::function`` format    | ​Required  |
+| func      | str       | R# function in ``package::function`` format    | ​Required   |
 | argv      | dict/list | Function parameters                            | ``{}``    |
 | options   | dict      | Runtime configuration for ``getOption()``      | ``{}``    |
 | workdir   | str       | Execution working directory                    | ``"./"``  |
@@ -118,3 +121,137 @@ argv = {"str": "world"},
     run_debug = False
 )
 ```
+
+### Usage Examples
+
+#### Basic Local Execution
+
+```python
+from r_lambda import call_lambda
+
+call_lambda(
+    func="demo::hello_world",
+    argv={"str": "world"},  # Dictionary-style arguments
+    options={"verbose": True},
+    workdir="./analysis"
+)
+```
+
+#### CLI-Style Arguments
+
+```python
+call_lambda(
+    "stats::calculate",
+    argv=["--input", "data.csv", "--threshold", "0.05"],  # CLI-style arguments
+    options={"parallel": True}
+)
+```
+
+#### Docker Execution
+
+```python
+from r_lambda import call_lambda, docker_image
+
+docker_config = docker_image(
+    id="rsharp/runtime:3.2",
+    volumn=["/data/inputs", "/data/outputs"],  # Absolute paths required
+    shm_size="2g",
+    name="analysis_container"
+)
+
+call_lambda(
+    func="preprocess::clean_data",
+    argv={"input_dir": "/data/inputs", "output_dir": "/data/outputs"},
+    docker=docker_config
+)
+```
+
+#### Advanced Configuration
+
+##### Volume Mounting
+
+The package automatically handles:
+
++ Docker socket mounting (``/var/run/docker.sock``)
++ ``/tmp`` directory sharing
++ Argument-specified volumes from ``docker_image()``
+​
+Example Mount:
+
+```python
+docker_image(
+    id="rsharp/runtime:3.2",
+    volumn=["/host/path"],  # Mounts to /host/path in container
+    ...
+)
+```
+
+##### Runtime Options
+
+Configure environment variables accessible via ``getOption()`` in R#:
+
+```python
+options = {
+    "max_memory": "16G",
+    "temp_dir": "/tmp/rsharp",
+    "threads": 8
+}
+```
+
+#### Debugging & Testing
+
+##### Dry-run Mode
+
+```python
+call_lambda(
+    func="demo::test",
+    run_debug=True  # Prints command without execution
+)
+```
+
+​Sample Output:
+
+```markdown
+[DEBUG] Generated command:
+docker run -v /data:/data ... rsharp/runtime:3.2 dotnet Rscript.dll --lambda demo::test
+```
+
+#### Configuration Inspection
+
+Check generated files in ``workdir/.r_env``:
+
++ ``run.json``: Serialized argv parameters
++ ``options.json``: Serialized runtime configuration
+
+### Best Practices
+​
+1. Path Handling​
+
+  + Use absolute paths for Docker volumes
+  + Avoid spaces in directory names
+  + Windows: Use raw strings for paths (``"C:\data"``)
+
+​2. Resource Allocation​
+
+  + Set shm_size for memory-intensive tasks
+  + Configure thread limits in options
+
+​3. Container Management​
+
+  + Reuse containers for sequential calls
+  + Clean up temporary containers with --rm flag
+
+#### Error Handling
+​
+Common Exit Codes:
+
+| Code | Description                |
+|------|----------------------------|
+| 0    | Success                    |
+| 127  | R# runtime not found       |
+| 139  | Memory allocation error    |
+| 255  | Invalid function signature |
+
+## License & Support
+
+MIT License. Report issues at [GitHub Repo](https://github.com/rsharp-lang/IronR).
