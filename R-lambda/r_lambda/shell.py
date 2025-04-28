@@ -174,6 +174,10 @@ class docker_run(shell):
             if self.docker["tty"]:
                 run_pipeline.append('-it')
 
+        if not self.docker["host_net"] is None:
+            if self.docker["host_net"]:
+                run_pipeline.append("--net=host")
+
         run_pipeline = docker.mount_volumn(
             docker_run=run_pipeline,
             argv=self.argv,
